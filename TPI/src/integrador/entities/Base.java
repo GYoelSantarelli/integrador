@@ -3,9 +3,11 @@ package integrador.entities;
 import java.time.LocalDateTime;
 
 public abstract class Base {
-    private Long id;
+
+    Long id;
     private boolean eliminado;
     private LocalDateTime createdAt;
+
 
     public Base() {
         this.createdAt = LocalDateTime.now();
@@ -14,20 +16,48 @@ public abstract class Base {
 
     public Base(Long id) {
         this();
+        setId(id);
+    }
+    
+    // getters y setters
+    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+
+        if (id != null && id < 0) {
+            throw new IllegalArgumentException(
+                    "El ID no puede ser negativo."
+            );
+        }
+
         this.id = id;
     }
 
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public boolean isEliminado() {
+        return eliminado;
+    }
 
-    public boolean isEliminado() { return eliminado; }
-    public void setEliminado(boolean eliminado) { this.eliminado = eliminado; }
+    public void setEliminado(boolean eliminado) {
+        this.eliminado = eliminado;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    // Forzar la implementación en subclases tal como pide la consigna
+    public void setCreatedAt(LocalDateTime createdAt) {
+
+    if (createdAt == null) {
+        throw new IllegalArgumentException(
+                "La fecha de creación no puede ser nula."
+        );
+    }
+
+    this.createdAt = createdAt;
+}
     @Override
     public abstract String toString();
 }

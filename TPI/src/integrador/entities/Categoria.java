@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Categoria extends Base {
+
     private String nombre;
     private String descripcion;
     private List<Producto> productos;
@@ -13,35 +14,90 @@ public class Categoria extends Base {
         this.productos = new ArrayList<>();
     }
 
-    public Categoria(Long id, String nombre, String descripcion) {
+    public Categoria(Long id,
+                     String nombre,
+                     String descripcion) {
+
         super(id);
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+
+        setNombre(nombre);
+        setDescripcion(descripcion);
+
         this.productos = new ArrayList<>();
     }
 
     public void agregarProducto(Producto producto) {
-        if (producto != null) {
-            this.productos.add(producto);
-            // Mantenemos la consistencia bidireccional si no estaba asignada
+
+        if (producto == null) {
+            return;
+        }
+
+        if (!productos.contains(producto)) {
+
+            productos.add(producto);
+
             if (producto.getCategoria() != this) {
                 producto.setCategoria(this);
             }
         }
     }
 
-    // Getters y Setters
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void eliminarProducto(Producto producto) {
 
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+        if (producto == null) {
+            return;
+        }
 
-    public List<Producto> getProductos() { return productos; }
-    public void setProductos(List<Producto> productos) { this.productos = productos; }
+        productos.remove(producto);
+    }
+    
+    //getters y setters
+    
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+
+        if (nombre == null ||
+                nombre.trim().isEmpty()) {
+
+            throw new IllegalArgumentException(
+                    "El nombre de la categoría es obligatorio."
+            );
+        }
+
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+
+        this.productos =
+                (productos != null)
+                        ? productos
+                        : new ArrayList<>();
+    }
 
     @Override
     public String toString() {
-        return String.format("Categoria [ID: %d, Nombre: %s, Descripcion: %s]", getId(), nombre, descripcion);
+
+        return String.format(
+                "Categoria [ID=%d, Nombre=%s, Productos=%d]",
+                getId(),
+                nombre,
+                productos.size()
+        );
     }
 }

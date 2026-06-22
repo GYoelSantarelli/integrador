@@ -1,6 +1,7 @@
 package integrador.entities;
 
 public class Producto extends Base {
+
     private String nombre;
     private Double precio;
     private String descripcion;
@@ -13,47 +14,113 @@ public class Producto extends Base {
         super();
     }
 
-    public Producto(Long id, String nombre, Double precio, String descripcion, int stock, String imagen, boolean disponible) {
+    public Producto(Long id,
+                    String nombre,
+                    Double precio,
+                    String descripcion,
+                    int stock,
+                    String imagen,
+                    boolean disponible) {
+
         super(id);
         this.nombre = nombre;
-        this.precio = precio;
+        setPrecio(precio);
         this.descripcion = descripcion;
-        this.stock = stock;
+        setStock(stock);
         this.imagen = imagen;
         this.disponible = disponible;
     }
 
     // Getters y Setters
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public Double getPrecio() { return precio; }
-    public void setPrecio(Double precio) { this.precio = precio; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public String getDescripcion() { return descripcion; }
-    public void set自由(String descripcion) { this.descripcion = descripcion; } // Corrección semántica interna
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public int getStock() { return stock; }
-    public void setStock(int stock) { this.stock = stock; }
+    public Double getPrecio() {
+        return precio;
+    }
 
-    public String getImagen() { return imagen; }
-    public void setImagen(String imagen) { this.imagen = imagen; }
+    public void setPrecio(Double precio) {
+        if (precio == null || precio < 0) {
+            throw new IllegalArgumentException(
+                    "El precio no puede ser nulo ni negativo."
+            );
+        }
+        this.precio = precio;
+    }
 
-    public boolean isDisponible() { return disponible; }
-    public void setDisponible(boolean disponible) { this.disponible = disponible; }
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-    public Categoria getCategoria() { return categoria; }
-    public void setCategoria(Categoria categoria) { 
-        this.categoria = categoria; 
-        // Consistencia de la relación
-        if (categoria != null && !categoria.getProductos().contains(this)) {
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        if (stock < 0) {
+            throw new IllegalArgumentException(
+                    "El stock no puede ser negativo."
+            );
+        }
+        this.stock = stock;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+
+        this.categoria = categoria;
+
+        // Mantiene sincronizada la relación bidireccional
+        if (categoria != null &&
+                !categoria.getProductos().contains(this)) {
+
             categoria.agregarProducto(this);
         }
     }
 
     @Override
+
     public String toString() {
-        return String.format("%s ($%.2f)", nombre, precio);
-    }
+
+    return String.format(
+            "Producto [ID=%d, Nombre=%s, Precio=$%.2f, Stock=%d, Disponible=%s, Categoria=%s]",
+            getId(),
+            nombre,
+            precio,
+            stock,
+            disponible ? "SI" : "NO",
+            (categoria != null
+                    ? categoria.getNombre()
+                    : "Sin categoría")
+    );
+}
 }

@@ -1,102 +1,648 @@
-package integrador;
+import integrador.Menu;
+import integrador.entities.Categoria;
+import integrador.service.CategoriaService;
+import integrador.entities.Producto;
+import integrador.service.ProductoService;
+import integrador.entities.Usuario;
+import integrador.enums.Rol;
+import integrador.service.UsuarioService;
+import integrador.entities.Pedido;
+import integrador.entities.DetallePedido;
 
-import integrador.entities.*;
-import integrador.enums.*;
-import java.util.ArrayList;
-import java.util.List;
+import integrador.enums.Estado;
+import integrador.enums.FormaPago;
+
+import integrador.service.PedidoService;
+import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
-        
-        // ---------------------------------------------------------
-        // 1. INSTANCIACIÓN DE 3 CATEGORÍAS (Nombres y desc distintas)
-        // ---------------------------------------------------------
-        Categoria cat1 = new Categoria(1L, "Hamburguesas", "Burgers artesanales con ingredientes frescos");
-        Categoria cat2 = new Categoria(2L, "Bebidas", "Gaseosas, jugos naturales y cervezas frías");
-        Categoria cat3 = new Categoria(3L, "Postres", "Dulces tentaciones para finalizar tu comida");
 
-        // ---------------------------------------------------------
-        // 2. INSTANCIACIÓN DE 6 PRODUCTOS (2 por cada categoría)
-        // ---------------------------------------------------------
-        Producto prod1 = new Producto(101L, "Cheeseburger Classic", 1200.0, "Carne de 150g y cheddar", 50, "burger1.jpg", true);
-        Producto prod2 = new Producto(102L, "BBQ Bacon Burger", 1500.0, "Salsa barbacoa y panceta", 40, "burger2.jpg", true);
-        cat1.agregarProducto(prod1);
-        cat1.agregarProducto(prod2);
+        Menu menu = new Menu();
+        Scanner sc = new Scanner(System.in);
 
-        Producto prod3 = new Producto(201L, "Coca-Cola Original 500ml", 350.0, "Refresco bien frío", 100, "coca.jpg", true);
-        Producto prod4 = new Producto(202L, "Cerveza IPArtisan", 600.0, "Cerveza tirada artesanal", 60, "ipa.jpg", true);
-        cat2.agregarProducto(prod3);
-        cat2.agregarProducto(prod4);
+        CategoriaService categoriaService =
+                new CategoriaService();
+        ProductoService productoService =
+                new ProductoService();
+        UsuarioService usuarioService =
+                new UsuarioService();   
+        PedidoService pedidoService =
+                new PedidoService();
+        int opcionPrincipal;
 
-        Producto prod5 = new Producto(301L, "Volcán de Chocolate", 750.0, "Corazón de chocolate líquido", 25, "volcan.jpg", true);
-        Producto prod6 = new Producto(302L, "Helado de Dulce de Leche", 500.0, "Cremoso helado artesanal", 30, "helado.jpg", true);
-        cat3.agregarProducto(prod5);
-        cat3.agregarProducto(prod6);
+        do {
 
-        // ---------------------------------------------------------
-        // 3. INSTANCIACIÓN DE 2 USUARIOS (Roles diferentes)
-        // ---------------------------------------------------------
-        Usuario admin = new Usuario(1L, "Carlos", "Gómez", "carlos.admin@foodstore.com", "11223344", "passAdmin123", Rol.ADMIN);
-        Usuario cliente = new Usuario(2L, "Ana", "Martínez", "ana.user@gmail.com", "55667788", "anaPass2026", Rol.USUARIO);
+            opcionPrincipal =
+                    menu.mostrarMenuPrincipal();
 
-        List<Usuario> listaUsuarios = new ArrayList<>();
-        listaUsuarios.add(admin);
-        listaUsuarios.add(cliente);
+            switch (opcionPrincipal) {
 
-        // ---------------------------------------------------------
-        // 4. INSTANCIACIÓN DE 4 PEDIDOS (2 por cada usuario) Y 12 DETALLES
-        //    (3 detalles por pedido utilizando obligatoriamente addDetallePedido)
-        // ---------------------------------------------------------
-        
-        // --- PEDIDOS DE CARLOS (ADMIN) ---
-        Pedido pedCarlos1 = new Pedido(1001L, Estado.TERMINADO, FormaPago.TARJETA);
-        pedCarlos1.addDetallePedido(2, prod1); // 2x Cheeseburger
-        pedCarlos1.addDetallePedido(2, prod3); // 2x Coca-Cola
-        pedCarlos1.addDetallePedido(1, prod5); // 1x Volcán Chocolate
-        admin.agregarPedido(pedCarlos1); // Relación bidireccional
+                case 1:
 
-        Pedido pedCarlos2 = new Pedido(1002L, Estado.CONFIRMADO, FormaPago.TRANSFERENCIA);
-        pedCarlos2.addDetallePedido(1, prod2); // 1x BBQ Burger
-        pedCarlos2.addDetallePedido(1, prod4); // 1x Cerveza IPA
-        pedCarlos2.addDetallePedido(2, prod6); // 2x Helado DDL
-        admin.agregarPedido(pedCarlos2);
+                    int opcionCategoria;
 
-        // --- PEDIDOS DE ANA (USUARIO) ---
-        Pedido pedAna1 = new Pedido(1003L, Estado.CONFIRMADO, FormaPago.EFECTIVO);
-        pedAna1.addDetallePedido(3, prod1); // 3x Cheeseburger
-        pedAna1.addDetallePedido(3, prod3); // 3x Coca-Cola
-        pedAna1.addDetallePedido(2, prod5); // 2x Volcán Chocolate
-        cliente.agregarPedido(pedAna1);
+                    do {
 
-        Pedido pedAna2 = new Pedido(1004L, Estado.PENDIENTE, FormaPago.TARJETA);
-        pedAna2.addDetallePedido(1, prod2); // 1x BBQ Burger
-        pedAna2.addDetallePedido(2, prod4); // 2x Cerveza IPA
-        pedAna2.addDetallePedido(1, prod6); // 1x Helado DDL
-        cliente.agregarPedido(pedAna2);
+                        opcionCategoria =
+                                menu.mostrarMenuCategorias();
 
+                        switch (opcionCategoria) {
 
-        // ---------------------------------------------------------
-        // 5. SALIDA POR CONSOLA REQUERIDA
-        // ---------------------------------------------------------
-        for (Usuario u : listaUsuarios) {
-            System.out.println("=============================================================================");
-            System.out.println(u.toString());
-            System.out.println("=============================================================================");
-            
-            for (Pedido p : u.getPedidos()) {
-                System.out.println("> " + p.toString());
-                System.out.println("-----------------------------------------------------------------------------");
-                
-                for (DetallePedido dp : p.getDetalles()) {
-                    System.out.println("  - DetallePedido #[" + dp.getId() + "]: " + dp.toString());
+                            case 1:
+
+                                System.out.print("ID: ");
+                                Long id = sc.nextLong();
+                                sc.nextLine();
+
+                                System.out.print("Nombre: ");
+                                String nombre =
+                                        sc.nextLine();
+
+                                System.out.print("Descripcion: ");
+                                String descripcion =
+                                        sc.nextLine();
+
+                                Categoria categoria =
+                                        new Categoria(
+                                                id,
+                                                nombre,
+                                                descripcion
+                                        );
+
+                                categoriaService
+                                        .crearCategoria(categoria);
+
+                                System.out.println(
+                                        "Categoria creada correctamente."
+                                );
+
+                                break;
+
+                            case 2:
+
+                                System.out.println(
+                                        "\n=== LISTADO ==="
+                                );
+
+                                for (Categoria c :
+                                        categoriaService.listarCategorias()) {
+
+                                    System.out.println(c);
+                                }
+
+                                break;
+
+                            case 3:
+
+                                System.out.print("ID a buscar: ");
+
+                                Long idBuscar =
+                                        sc.nextLong();
+
+                                try {
+
+                                    Categoria encontrada =
+                                            categoriaService
+                                                    .buscarPorId(idBuscar);
+
+                                    System.out.println(
+                                            encontrada
+                                    );
+
+                                } catch (Exception e) {
+
+                                    System.out.println(
+                                            e.getMessage()
+                                    );
+                                }
+
+                                break;
+
+                            case 4:
+
+                                System.out.print("ID a eliminar: ");
+
+                                Long idEliminar =
+                                        sc.nextLong();
+
+                                try {
+
+                                    categoriaService
+                                            .eliminarCategoria(idEliminar);
+
+                                    System.out.println(
+                                            "Categoria eliminada."
+                                    );
+
+                                } catch (Exception e) {
+
+                                    System.out.println(
+                                            e.getMessage()
+                                    );
+                                }
+
+                                break;
+
+                            case 0:
+                                break;
+
+                            default:
+
+                                System.out.println(
+                                        "Opcion invalida."
+                                );
+                        }
+
+                    } while (opcionCategoria != 0);
+
+                    break;
+
+                case 2:
+
+    int opcionProducto;
+
+    do {
+
+        opcionProducto =
+                menu.mostrarMenuProductos();
+
+        switch (opcionProducto) {
+
+            case 1:
+
+                System.out.print("ID: ");
+                Long idProducto = sc.nextLong();
+                sc.nextLine();
+
+                System.out.print("Nombre: ");
+                String nombreProducto = sc.nextLine();
+
+                System.out.print("Precio: ");
+                Double precio = sc.nextDouble();
+                sc.nextLine();
+
+                System.out.print("Descripcion: ");
+                String descripcionProducto = sc.nextLine();
+
+                System.out.print("Stock: ");
+                int stock = sc.nextInt();
+                sc.nextLine();
+
+                Producto producto =
+                        new Producto(
+                                idProducto,
+                                nombreProducto,
+                                precio,
+                                descripcionProducto,
+                                stock,
+                                "",
+                                true
+                        );
+
+                productoService.crearProducto(producto);
+
+                System.out.println(
+                        "Producto creado correctamente."
+                );
+
+                break;
+
+            case 2:
+
+                System.out.println(
+                        "\n=== PRODUCTOS ==="
+                );
+
+                for (Producto p :
+                        productoService.listarProductos()) {
+
+                    System.out.println(p);
                 }
-                
-                System.out.printf("  TOTAL DEL PEDIDO: $%.2f\n", p.getTotal());
-                System.out.println("-----------------------------------------------------------------------------");
-            }
-            
-            System.out.printf("TOTAL ACUMULADO del usuario: $%.2f\n", u.obtenerTotalAcumulado());
-            System.out.println("=============================================================================\n");
+
+                break;
+
+            case 3:
+
+                System.out.print(
+                        "ID producto: "
+                );
+
+                Long idBuscarProducto =
+                        sc.nextLong();
+
+                try {
+
+                    Producto encontrado =
+                            productoService.buscarPorId(
+                                    idBuscarProducto
+                            );
+
+                    System.out.println(
+                            encontrado
+                    );
+
+                } catch (Exception e) {
+
+                    System.out.println(
+                            e.getMessage()
+                    );
+                }
+
+                break;
+
+            case 4:
+
+                System.out.print(
+                        "ID producto: "
+                );
+
+                Long idEliminarProducto =
+                        sc.nextLong();
+
+                try {
+
+                    productoService.eliminarProducto(
+                            idEliminarProducto
+                    );
+
+                    System.out.println(
+                            "Producto eliminado."
+                    );
+
+                } catch (Exception e) {
+
+                    System.out.println(
+                            e.getMessage()
+                    );
+                }
+
+                break;
+
+            case 0:
+                break;
+
+            default:
+                System.out.println(
+                        "Opcion invalida."
+                );
         }
+
+    } while (opcionProducto != 0);
+
+    break;
+
+                case 3:
+
+    int opcionUsuario;
+
+    do {
+
+        opcionUsuario =
+                menu.mostrarMenuUsuarios();
+
+        switch (opcionUsuario) {
+
+            case 1:
+
+                System.out.print("ID: ");
+                Long idUsuario = sc.nextLong();
+                sc.nextLine();
+
+                System.out.print("Nombre: ");
+                String nombreUsuario = sc.nextLine();
+
+                System.out.print("Apellido: ");
+                String apellido = sc.nextLine();
+
+                System.out.print("Mail: ");
+                String mail = sc.nextLine();
+
+                System.out.print("Celular: ");
+                String celular = sc.nextLine();
+
+                System.out.print("Contraseña: ");
+                String contrasenia = sc.nextLine();
+
+                System.out.println("Rol:");
+                System.out.println("1 - ADMIN");
+                System.out.println("2 - CLIENTE");
+
+                int opcionRol = sc.nextInt();
+
+                Rol rol =
+                        (opcionRol == 1)
+                                ? Rol.ADMIN
+                                : Rol.CLIENTE;
+
+                try {
+
+                    Usuario usuario =
+                            new Usuario(
+                                    idUsuario,
+                                    nombreUsuario,
+                                    apellido,
+                                    mail,
+                                    celular,
+                                    contrasenia,
+                                    rol
+                            );
+
+                    usuarioService.crearUsuario(
+                            usuario
+                    );
+
+                    System.out.println(
+                            "Usuario creado correctamente."
+                    );
+
+                } catch (Exception e) {
+
+                    System.out.println(
+                            e.getMessage()
+                    );
+                }
+
+                break;
+
+            case 2:
+
+                System.out.println(
+                        "\n=== USUARIOS ==="
+                );
+
+                for (Usuario u :
+                        usuarioService.listarUsuarios()) {
+
+                    System.out.println(u);
+                }
+
+                break;
+
+            case 3:
+
+                System.out.print(
+                        "ID usuario: "
+                );
+
+                Long idBuscarUsuario =
+                        sc.nextLong();
+
+                try {
+
+                    Usuario usuario =
+                            usuarioService.buscarPorId(
+                                    idBuscarUsuario
+                            );
+
+                    System.out.println(
+                            usuario
+                    );
+
+                } catch (Exception e) {
+
+                    System.out.println(
+                            e.getMessage()
+                    );
+                }
+
+                break;
+
+            case 4:
+
+                System.out.print(
+                        "ID usuario: "
+                );
+
+                Long idEliminarUsuario =
+                        sc.nextLong();
+
+                try {
+
+                    usuarioService.eliminarUsuario(
+                            idEliminarUsuario
+                    );
+
+                    System.out.println(
+                            "Usuario eliminado."
+                    );
+
+                } catch (Exception e) {
+
+                    System.out.println(
+                            e.getMessage()
+                    );
+                }
+
+                break;
+
+            case 0:
+                break;
+
+            default:
+
+                System.out.println(
+                        "Opcion invalida."
+                );
+        }
+
+    } while (opcionUsuario != 0);
+
+    break;
+
+                case 4:
+
+    int opcionPedido;
+
+    do {
+
+        opcionPedido =
+                menu.mostrarMenuPedidos();
+
+        switch (opcionPedido) {
+
+            case 1:
+
+                System.out.print("ID Pedido: ");
+                Long idPedido = sc.nextLong();
+
+                Pedido pedido =
+                        new Pedido(
+                                idPedido,
+                                Estado.PENDIENTE,
+                                FormaPago.EFECTIVO
+                        );
+
+                pedidoService.crearPedido(
+                        pedido
+                );
+
+                System.out.println(
+                        "Pedido creado."
+                );
+
+                break;
+
+            case 2:
+
+                System.out.println(
+                        "\n=== PEDIDOS ==="
+                );
+
+                for (Pedido p :
+                        pedidoService.listarPedidos()) {
+
+                    System.out.println(p);
+                }
+
+                break;
+
+            case 3:
+
+                try {
+
+                    System.out.print(
+                            "ID Pedido: "
+                    );
+
+                    Long pedidoId =
+                            sc.nextLong();
+
+                    System.out.print(
+                            "ID Producto: "
+                    );
+
+                    Long productoId =
+                            sc.nextLong();
+
+                    System.out.print(
+                            "Cantidad: "
+                    );
+
+                    int cantidad =
+                            sc.nextInt();
+
+                    Producto producto =
+                            productoService.buscarPorId(
+                                    productoId
+                            );
+
+                    pedidoService.agregarProducto(
+                            pedidoId,
+                            producto,
+                            cantidad
+                    );
+
+                    System.out.println(
+                            "Producto agregado."
+                    );
+
+                } catch (Exception e) {
+
+                    System.out.println(
+                            e.getMessage()
+                    );
+                }
+
+                break;
+
+            case 4:
+
+                try {
+
+                    System.out.print(
+                            "ID Pedido: "
+                    );
+
+                    Long idDetalle =
+                            sc.nextLong();
+
+                    Pedido p =
+                            pedidoService.buscarPorId(
+                                    idDetalle
+                            );
+
+                    System.out.println(
+                            p
+                    );
+
+                    System.out.println(
+                            "\nDETALLES:"
+                    );
+
+                    for (DetallePedido d :
+                            p.getDetalles()) {
+
+                        System.out.println(
+                                d
+                        );
+                    }
+
+                    System.out.println(
+                            "\nTOTAL: $"
+                                    + p.getTotal()
+                    );
+
+                } catch (Exception e) {
+
+                    System.out.println(
+                            e.getMessage()
+                    );
+                }
+
+                break;
+
+            case 5:
+
+                try {
+
+                    System.out.print(
+                            "ID Pedido: "
+                    );
+
+                    Long idEliminar =
+                            sc.nextLong();
+
+                    pedidoService.eliminarPedido(
+                            idEliminar
+                    );
+
+                    System.out.println(
+                            "Pedido eliminado."
+                    );
+
+                } catch (Exception e) {
+
+                    System.out.println(
+                            e.getMessage()
+                    );
+                }
+
+                break;
+
+            case 0:
+                break;
+
+            default:
+
+                System.out.println(
+                        "Opcion invalida."
+                );
+        }
+
+    } while (opcionPedido != 0);
+
+    break;
+
+                case 0:
+                    System.out.println("Hasta luego");
+                    break;
+
+                default:
+                    System.out.println("Opcion invalida.");
+            }
+
+        } while (opcionPrincipal != 0);
     }
 }
