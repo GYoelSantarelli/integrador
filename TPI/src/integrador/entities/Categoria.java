@@ -14,11 +14,11 @@ public class Categoria extends Base {
         this.productos = new ArrayList<>();
     }
 
-    public Categoria(Long id,
-                     String nombre,
-                     String descripcion) {
+    public Categoria(
+            String nombre,
+            String descripcion) {
 
-        super(id);
+        super();
 
         setNombre(nombre);
         setDescripcion(descripcion);
@@ -50,9 +50,9 @@ public class Categoria extends Base {
 
         productos.remove(producto);
     }
-    
-    //getters y setters
-    
+
+    // GETTERS Y SETTERS
+
     public String getNombre() {
         return nombre;
     }
@@ -75,7 +75,11 @@ public class Categoria extends Base {
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+
+        this.descripcion =
+                (descripcion != null)
+                        ? descripcion
+                        : "";
     }
 
     public List<Producto> getProductos() {
@@ -94,7 +98,7 @@ public class Categoria extends Base {
     public String toString() {
 
         return String.format(
-                "Categoria [ID=%d, Nombre=%s, Productos=%d]",
+                "Categoria #%d | %s | Productos asociados: %d",
                 getId(),
                 nombre,
                 productos.size()

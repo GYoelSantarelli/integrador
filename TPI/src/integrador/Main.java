@@ -19,8 +19,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Menu menu = new Menu();
         Scanner sc = new Scanner(System.in);
+        Menu menu = new Menu(sc);
 
         CategoriaService categoriaService =
                 new CategoriaService();
@@ -52,30 +52,29 @@ public class Main {
 
                             case 1:
 
-                                System.out.print("ID: ");
-                                Long id = sc.nextLong();
-                                sc.nextLine();
-
                                 System.out.print("Nombre: ");
-                                String nombre =
-                                        sc.nextLine();
+                                String nombre = sc.nextLine();
 
                                 System.out.print("Descripcion: ");
-                                String descripcion =
-                                        sc.nextLine();
+                                String descripcion = sc.nextLine();
 
                                 Categoria categoria =
                                         new Categoria(
-                                                id,
                                                 nombre,
                                                 descripcion
                                         );
 
-                                categoriaService
-                                        .crearCategoria(categoria);
+                                categoriaService.crearCategoria(
+                                        categoria
+                                );
 
                                 System.out.println(
                                         "Categoria creada correctamente."
+                                );
+
+                                System.out.println(
+                                        "ID generado: "
+                                                + categoria.getId()
                                 );
 
                                 break;
@@ -99,7 +98,9 @@ public class Main {
                                 System.out.print("ID a buscar: ");
 
                                 Long idBuscar =
-                                        sc.nextLong();
+                                    Long.parseLong(
+                                            sc.nextLine()
+                                    );
 
                                 try {
 
@@ -125,7 +126,9 @@ public class Main {
                                 System.out.print("ID a eliminar: ");
 
                                 Long idEliminar =
-                                        sc.nextLong();
+                                    Long.parseLong(
+                                            sc.nextLine()
+                                    );
 
                                 try {
 
@@ -171,28 +174,29 @@ public class Main {
         switch (opcionProducto) {
 
             case 1:
-
-                System.out.print("ID: ");
-                Long idProducto = sc.nextLong();
-                sc.nextLine();
-
+                
                 System.out.print("Nombre: ");
                 String nombreProducto = sc.nextLine();
 
                 System.out.print("Precio: ");
-                Double precio = sc.nextDouble();
-                sc.nextLine();
+                Double precio = 
+                        Double.parseDouble(
+                                sc.nextLine()
+                        );
+                                
 
                 System.out.print("Descripcion: ");
                 String descripcionProducto = sc.nextLine();
 
                 System.out.print("Stock: ");
-                int stock = sc.nextInt();
-                sc.nextLine();
+                int stock = 
+                        Integer.parseInt(
+                            sc.nextLine()
+                        );
+                
 
                 Producto producto =
                         new Producto(
-                                idProducto,
                                 nombreProducto,
                                 precio,
                                 descripcionProducto,
@@ -205,6 +209,11 @@ public class Main {
 
                 System.out.println(
                         "Producto creado correctamente."
+                );
+
+                System.out.println(
+                        "ID generado: "
+                                + producto.getId()
                 );
 
                 break;
@@ -230,7 +239,9 @@ public class Main {
                 );
 
                 Long idBuscarProducto =
-                        sc.nextLong();
+                        Long.parseLong(
+                                sc.nextLine()
+                        );
 
                 try {
 
@@ -259,7 +270,9 @@ public class Main {
                 );
 
                 Long idEliminarProducto =
-                        sc.nextLong();
+                        Long.parseLong(
+                            sc.nextLine()
+                        );
 
                 try {
 
@@ -306,41 +319,44 @@ public class Main {
 
             case 1:
 
-                System.out.print("ID: ");
-                Long idUsuario = sc.nextLong();
-                sc.nextLine();
-
-                System.out.print("Nombre: ");
-                String nombreUsuario = sc.nextLine();
-
-                System.out.print("Apellido: ");
-                String apellido = sc.nextLine();
-
-                System.out.print("Mail: ");
-                String mail = sc.nextLine();
-
-                System.out.print("Celular: ");
-                String celular = sc.nextLine();
-
-                System.out.print("Contraseña: ");
-                String contrasenia = sc.nextLine();
-
-                System.out.println("Rol:");
-                System.out.println("1 - ADMIN");
-                System.out.println("2 - CLIENTE");
-
-                int opcionRol = sc.nextInt();
-
-                Rol rol =
-                        (opcionRol == 1)
-                                ? Rol.ADMIN
-                                : Rol.CLIENTE;
-
                 try {
+
+                    System.out.print("Nombre: ");
+                    String nombreUsuario =
+                            sc.nextLine();
+
+                    System.out.print("Apellido: ");
+                    String apellido =
+                            sc.nextLine();
+
+                    System.out.print("Mail: ");
+                    String mail =
+                            sc.nextLine();
+
+                    System.out.print("Celular: ");
+                    String celular =
+                            sc.nextLine();
+
+                    System.out.print("Contraseña: ");
+                    String contrasenia =
+                            sc.nextLine();
+
+                    System.out.println("Rol:");
+                    System.out.println("1 - ADMIN");
+                    System.out.println("2 - CLIENTE");
+
+                    int opcionRol =
+                            Integer.parseInt(
+                                    sc.nextLine()
+                            );
+
+                    Rol rol =
+                            (opcionRol == 1)
+                                    ? Rol.ADMIN
+                                    : Rol.CLIENTE;
 
                     Usuario usuario =
                             new Usuario(
-                                    idUsuario,
                                     nombreUsuario,
                                     apellido,
                                     mail,
@@ -355,6 +371,11 @@ public class Main {
 
                     System.out.println(
                             "Usuario creado correctamente."
+                    );
+
+                    System.out.println(
+                            "ID generado: "
+                                    + usuario.getId()
                     );
 
                 } catch (Exception e) {
@@ -382,14 +403,16 @@ public class Main {
 
             case 3:
 
-                System.out.print(
-                        "ID usuario: "
-                );
-
-                Long idBuscarUsuario =
-                        sc.nextLong();
-
                 try {
+
+                    System.out.print(
+                            "ID usuario: "
+                    );
+
+                    Long idBuscarUsuario =
+                            Long.parseLong(
+                                    sc.nextLine()
+                            );
 
                     Usuario usuario =
                             usuarioService.buscarPorId(
@@ -411,14 +434,16 @@ public class Main {
 
             case 4:
 
-                System.out.print(
-                        "ID usuario: "
-                );
-
-                Long idEliminarUsuario =
-                        sc.nextLong();
-
                 try {
+
+                    System.out.print(
+                            "ID usuario: "
+                    );
+
+                    Long idEliminarUsuario =
+                            Long.parseLong(
+                                    sc.nextLine()
+                            );
 
                     usuarioService.eliminarUsuario(
                             idEliminarUsuario
@@ -450,12 +475,11 @@ public class Main {
     } while (opcionUsuario != 0);
 
     break;
-
                 case 4:
+                    
+        int opcionPedido;
 
-    int opcionPedido;
-
-    do {
+        do {
 
         opcionPedido =
                 menu.mostrarMenuPedidos();
@@ -464,23 +488,93 @@ public class Main {
 
             case 1:
 
-                System.out.print("ID Pedido: ");
-                Long idPedido = sc.nextLong();
+                try {
 
-                Pedido pedido =
-                        new Pedido(
-                                idPedido,
-                                Estado.PENDIENTE,
-                                FormaPago.EFECTIVO
-                        );
+                    System.out.print(
+                            "ID Usuario: "
+                    );
 
-                pedidoService.crearPedido(
-                        pedido
-                );
+                    Long idUsuarioPedido =
+                                Long.parseLong(
+                                    sc.nextLine()
+                            );
 
-                System.out.println(
-                        "Pedido creado."
-                );
+                    Usuario usuarioPedido =
+                            usuarioService.buscarPorId(
+                                    idUsuarioPedido
+                            );
+
+                    System.out.println(
+                            "\nForma de pago:"
+                    );
+
+                    System.out.println(
+                            "1 - TARJETA"
+                    );
+
+                    System.out.println(
+                            "2 - TRANSFERENCIA"
+                    );
+
+                    System.out.println(
+                            "3 - EFECTIVO"
+                    );
+
+                    int opcionFormaPago =
+                                Integer.parseInt(
+                                    sc.nextLine()
+                            );
+
+                    FormaPago formaPago;
+
+                    switch (opcionFormaPago) {
+
+                        case 1:
+                            formaPago =
+                                    FormaPago.TARJETA;
+                            break;
+
+                        case 2:
+                            formaPago =
+                                    FormaPago.TRANSFERENCIA;
+                            break;
+
+                        case 3:
+                            formaPago =
+                                    FormaPago.EFECTIVO;
+                            break;
+
+                        default:
+                            throw new IllegalArgumentException(
+                                    "Forma de pago inválida."
+                            );
+                    }
+
+                    Pedido pedido =
+                            new Pedido(
+                                    formaPago,
+                                    usuarioPedido
+                            );
+
+                    pedidoService.crearPedido(
+                            pedido
+                    );
+
+                    System.out.println(
+                            "Pedido creado correctamente."
+                    );
+
+                    System.out.println(
+                            "ID generado: "
+                                    + pedido.getId()
+                    );
+
+                } catch (Exception e) {
+
+                    System.out.println(
+                            e.getMessage()
+                    );
+                }
 
                 break;
 
@@ -507,21 +601,27 @@ public class Main {
                     );
 
                     Long pedidoId =
-                            sc.nextLong();
+                            Long.parseLong(
+                                    sc.nextLine()
+                            );
 
                     System.out.print(
                             "ID Producto: "
                     );
 
                     Long productoId =
-                            sc.nextLong();
+                            Long.parseLong(
+                                    sc.nextLine()
+                            );
 
                     System.out.print(
                             "Cantidad: "
                     );
 
                     int cantidad =
-                            sc.nextInt();
+                            Integer.parseInt(
+                                    sc.nextLine()
+                            );
 
                     Producto producto =
                             productoService.buscarPorId(
@@ -556,7 +656,9 @@ public class Main {
                     );
 
                     Long idDetalle =
-                            sc.nextLong();
+                            Long.parseLong(
+                                    sc.nextLine()
+                            );
 
                     Pedido p =
                             pedidoService.buscarPorId(
@@ -602,7 +704,9 @@ public class Main {
                     );
 
                     Long idEliminar =
-                            sc.nextLong();
+                            Long.parseLong(
+                                    sc.nextLine()
+                            );
 
                     pedidoService.eliminarPedido(
                             idEliminar
@@ -644,5 +748,5 @@ public class Main {
             }
 
         } while (opcionPrincipal != 0);
-    }
+}
 }

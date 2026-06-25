@@ -12,31 +12,35 @@ public class DetallePedido extends Base {
         this.subtotal = 0.0;
     }
 
-    public DetallePedido(Long id,
-                         int cantidad,
-                         Producto producto,
-                         Pedido pedido) {
+    public DetallePedido(
+            int cantidad,
+            Producto producto,
+            Pedido pedido) {
 
-        super(id);
+        super();
 
+        this.subtotal = 0.0;
         this.pedido = pedido;
 
         setProducto(producto);
         setCantidad(cantidad);
+
+        calcularSubtotal();
     }
 
     public Double calcularSubtotal() {
 
         if (producto != null) {
-            this.subtotal = cantidad * producto.getPrecio();
+            this.subtotal =
+                    cantidad * producto.getPrecio();
         } else {
             this.subtotal = 0.0;
         }
 
         return subtotal;
     }
-    
-    //Getters y setters
+
+    // GETTERS Y SETTERS
 
     public int getCantidad() {
         return cantidad;
@@ -89,6 +93,7 @@ public class DetallePedido extends Base {
     }
 
     public void setPedido(Pedido pedido) {
+
         this.pedido = pedido;
 
         if (pedido != null) {
@@ -105,7 +110,8 @@ public class DetallePedido extends Base {
                         : "Sin producto";
 
         return String.format(
-                "%s x %d => Subtotal: $%.2f",
+                "Detalle #%d | %s x %d | Subtotal: $%.2f",
+                getId(),
                 nombreProducto,
                 cantidad,
                 subtotal

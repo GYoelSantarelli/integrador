@@ -17,25 +17,32 @@ public class Pedido extends Base implements Calculable {
     private List<DetallePedido> detalles;
     private Usuario usuario;
 
-    // Generador simple de IDs para DetallePedido
-    private static long detalleIdSequence = 1;
-
     public Pedido() {
         super();
+
         this.fecha = LocalDate.now();
         this.estado = Estado.PENDIENTE;
+        this.formaPago = null;
         this.total = 0.0;
         this.detalles = new ArrayList<>();
     }
 
-    public Pedido(Long id, Estado estado, FormaPago formaPago) {
-        super(id);
+    public Pedido(FormaPago formaPago, Usuario usuario) {
+        super();
+
+        if (formaPago == null) {
+            throw new IllegalArgumentException(
+                    "La forma de pago no puede ser nula."
+            );
+        }
 
         this.fecha = LocalDate.now();
-        this.estado = estado;
+        this.estado = Estado.PENDIENTE;
         this.formaPago = formaPago;
         this.total = 0.0;
         this.detalles = new ArrayList<>();
+
+        setUsuario(usuario);
     }
 
     @Override
@@ -50,7 +57,9 @@ public class Pedido extends Base implements Calculable {
         this.total = suma;
     }
 
-    public void addDetallePedido(int cantidad, Producto producto) {
+    public void addDetallePedido(
+            int cantidad,
+            Producto producto) {
 
         if (cantidad <= 0) {
             throw new IllegalArgumentException(
@@ -77,7 +86,6 @@ public class Pedido extends Base implements Calculable {
 
             DetallePedido nuevoDetalle =
                     new DetallePedido(
-                            detalleIdSequence++,
                             cantidad,
                             producto,
                             this
@@ -106,10 +114,9 @@ public class Pedido extends Base implements Calculable {
 
         for (DetallePedido detalle : detalles) {
 
-            if (detalle.getProducto() != null &&
-                    detalle.getProducto()
-                            .getId()
-                            .equals(producto.getId())) {
+            if (detalle.getProducto() != null
+                    && detalle.getProducto().getId()
+                    .equals(producto.getId())) {
 
                 return detalle;
             }
@@ -135,14 +142,21 @@ public class Pedido extends Base implements Calculable {
             calcularTotal();
         }
     }
-    
-    //getters y setters
-    
+
+    // GETTERS Y SETTERS
+
     public LocalDate getFecha() {
         return fecha;
     }
 
     public void setFecha(LocalDate fecha) {
+
+        if (fecha == null) {
+            throw new IllegalArgumentException(
+                    "La fecha no puede ser nula."
+            );
+        }
+
         this.fecha = fecha;
     }
 
@@ -151,6 +165,13 @@ public class Pedido extends Base implements Calculable {
     }
 
     public void setEstado(Estado estado) {
+
+        if (estado == null) {
+            throw new IllegalArgumentException(
+                    "El estado no puede ser nulo."
+            );
+        }
+
         this.estado = estado;
     }
 
@@ -163,6 +184,13 @@ public class Pedido extends Base implements Calculable {
     }
 
     public void setFormaPago(FormaPago formaPago) {
+
+        if (formaPago == null) {
+            throw new IllegalArgumentException(
+                    "La forma de pago no puede ser nula."
+            );
+        }
+
         this.formaPago = formaPago;
     }
 
@@ -170,7 +198,8 @@ public class Pedido extends Base implements Calculable {
         return detalles;
     }
 
-    public void setDetalles(List<DetallePedido> detalles) {
+    public void setDetalles(
+            List<DetallePedido> detalles) {
 
         this.detalles =
                 (detalles != null)
@@ -188,8 +217,8 @@ public class Pedido extends Base implements Calculable {
 
         this.usuario = usuario;
 
-        if (usuario != null &&
-                !usuario.getPedidos().contains(this)) {
+        if (usuario != null
+                && !usuario.getPedidos().contains(this)) {
 
             usuario.agregarPedido(this);
         }
