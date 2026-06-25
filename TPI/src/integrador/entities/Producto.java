@@ -14,30 +14,38 @@ public class Producto extends Base {
         super();
     }
 
-    public Producto(Long id,
-                    String nombre,
-                    Double precio,
-                    String descripcion,
-                    int stock,
-                    String imagen,
-                    boolean disponible) {
+    public Producto(
+            String nombre,
+            Double precio,
+            String descripcion,
+            int stock,
+            String imagen,
+            boolean disponible) {
 
-        super(id);
-        this.nombre = nombre;
+        super();
+
+        setNombre(nombre);
         setPrecio(precio);
-        this.descripcion = descripcion;
+        setDescripcion(descripcion);
         setStock(stock);
-        this.imagen = imagen;
-        this.disponible = disponible;
+        setImagen(imagen);
+        setDisponible(disponible);
     }
 
-    // Getters y Setters
+    // GETTERS Y SETTERS
 
     public String getNombre() {
         return nombre;
     }
 
     public void setNombre(String nombre) {
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "El nombre no puede estar vacío."
+            );
+        }
+
         this.nombre = nombre;
     }
 
@@ -46,11 +54,13 @@ public class Producto extends Base {
     }
 
     public void setPrecio(Double precio) {
+
         if (precio == null || precio < 0) {
             throw new IllegalArgumentException(
                     "El precio no puede ser nulo ni negativo."
             );
         }
+
         this.precio = precio;
     }
 
@@ -59,7 +69,11 @@ public class Producto extends Base {
     }
 
     public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+
+        this.descripcion =
+                (descripcion != null)
+                        ? descripcion
+                        : "";
     }
 
     public int getStock() {
@@ -67,11 +81,13 @@ public class Producto extends Base {
     }
 
     public void setStock(int stock) {
+
         if (stock < 0) {
             throw new IllegalArgumentException(
                     "El stock no puede ser negativo."
             );
         }
+
         this.stock = stock;
     }
 
@@ -99,7 +115,6 @@ public class Producto extends Base {
 
         this.categoria = categoria;
 
-        // Mantiene sincronizada la relación bidireccional
         if (categoria != null &&
                 !categoria.getProductos().contains(this)) {
 
@@ -108,19 +123,18 @@ public class Producto extends Base {
     }
 
     @Override
-
     public String toString() {
 
-    return String.format(
-            "Producto [ID=%d, Nombre=%s, Precio=$%.2f, Stock=%d, Disponible=%s, Categoria=%s]",
-            getId(),
-            nombre,
-            precio,
-            stock,
-            disponible ? "SI" : "NO",
-            (categoria != null
-                    ? categoria.getNombre()
-                    : "Sin categoría")
-    );
-}
+        return String.format(
+                "Producto #%d | %s | $%.2f | Stock: %d | Disponible: %s | Categoría: %s",
+                getId(),
+                nombre,
+                precio,
+                stock,
+                disponible ? "SI" : "NO",
+                categoria != null
+                        ? categoria.getNombre()
+                        : "Sin categoría"
+        );
+    }
 }

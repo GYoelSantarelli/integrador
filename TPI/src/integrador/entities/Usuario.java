@@ -15,30 +15,25 @@ public class Usuario extends Base {
     private Rol rol;
     private List<Pedido> pedidos;
 
-    public Usuario() {
-        super();
-        this.pedidos = new ArrayList<>();
-    }
+    public Usuario(
+        String nombre,
+        String apellido,
+        String mail,
+        String celular,
+        String contrasenia,
+        Rol rol) {
 
-    public Usuario(Long id,
-                   String nombre,
-                   String apellido,
-                   String mail,
-                   String celular,
-                   String contrasenia,
-                   Rol rol) {
+    super();
 
-        super(id);
+    setNombre(nombre);
+    setApellido(apellido);
+    setMail(mail);
+    setCelular(celular);
+    setContrasenia(contrasenia);
+    setRol(rol);
 
-        setNombre(nombre);
-        setApellido(apellido);
-        setMail(mail);
-        setContrasenia(contrasenia);
-
-        this.celular = celular;
-        setRol(rol);
-        this.pedidos = new ArrayList<>();
-    }
+    this.pedidos = new ArrayList<>();
+}
 
     public void agregarPedido(Pedido pedido) {
 
