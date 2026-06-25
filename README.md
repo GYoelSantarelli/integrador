@@ -21,6 +21,7 @@ Para ejecutar el proyecto es necesario tener instalado:
 ## Ejecución del proyecto
 
 1. Clonar el repositorio:
+   
 En caso de no tener SSH
 ```bash
 git clone https://github.com/GYoelSantarelli/integrador.git
