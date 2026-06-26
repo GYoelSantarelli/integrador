@@ -49,3 +49,5 @@ git clone git@github.com:GYoelSantarelli/integrador.git
 * Creación y administración de pedidos.
 * Control automático del stock.
 * Cálculo automático de subtotales y totales.
+## Video
+Link del video https://drive.google.com/file/d/1SP3qpKBd3J7FZycux5iV98GPv0zT8bxp/view?usp=drive_link
